@@ -111,7 +111,7 @@ class MockData {
     foodSavedKg: 3.4,
     moneySavedEuros: 18.5,
     streakDays: 5,
-    weeklyFoodSaved: [0.2, 0.5, 0.3, 0.8, 0.6, 0.7, 0.3],
+    weeklyFoodSaved: List.unmodifiable([0.2, 0.5, 0.3, 0.8, 0.6, 0.7, 0.3]),
     badges: const [
       BadgeModel(emoji: '🌱', name: 'Primera vez', earned: true),
       BadgeModel(emoji: '🔥', name: 'Racha de 5 días', earned: true),

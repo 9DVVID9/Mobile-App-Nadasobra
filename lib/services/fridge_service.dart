@@ -18,5 +18,10 @@ class FridgeService {
 
   void add(FridgeItem item) => _items.add(item);
 
+  void update(FridgeItem item) {
+    final idx = _items.indexWhere((i) => i.id == item.id);
+    if (idx != -1) _items[idx] = item;
+  }
+
   void remove(String id) => _items.removeWhere((i) => i.id == id);
 }
