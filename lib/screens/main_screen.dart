@@ -43,8 +43,11 @@ class _MainScreenState extends State<MainScreen> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
-        if (_navigatorKeys[_currentIndex].currentState!.canPop()) {
-          _navigatorKeys[_currentIndex].currentState!.pop();
+        final nav = _navigatorKeys[_currentIndex].currentState!;
+        if (nav.canPop()) {
+          nav.pop();
+        } else if (_currentIndex != 0) {
+          setState(() => _currentIndex = 0);
         }
       },
       child: Scaffold(
@@ -68,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildNav() {
-    const labels = ['Track', 'Save', 'Impact'];
+    const labels = ['Nevera', 'Recetas', 'Impacto'];
     const icons = ['🧊', '🍳', '📊'];
 
     return SafeArea(
