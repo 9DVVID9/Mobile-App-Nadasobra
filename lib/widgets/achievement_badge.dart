@@ -29,10 +29,13 @@ class AchievementBadge extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          Text(badge.name,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              style: GoogleFonts.inter(fontSize: 10, color: AppColors.muted)),
+          SizedBox(
+            width: 64,
+            child: Text(badge.name,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                style: GoogleFonts.inter(fontSize: 10, color: AppColors.muted)),
+          ),
         ],
       ),
     );

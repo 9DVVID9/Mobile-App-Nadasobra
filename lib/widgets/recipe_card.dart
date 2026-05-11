@@ -27,6 +27,7 @@ class RecipeCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(19),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Container(width: 4, color: recipe.accentColor),
                   Expanded(
