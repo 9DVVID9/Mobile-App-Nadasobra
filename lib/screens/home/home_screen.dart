@@ -3,8 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../theme/app_colors.dart';
 import '../../models/fridge_item.dart';
+import '../../models/recipe.dart';
 import '../../services/fridge_service.dart';
 import '../../services/recipe_service.dart';
+import '../save/recipe_detail_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final VoidCallback? onGoToFridge;
@@ -25,7 +27,7 @@ class HomeScreen extends StatelessWidget {
             SliverToBoxAdapter(child: _buildHeader(now)),
             SliverToBoxAdapter(child: _buildExpiringSoon(expiring)),
             if (topRecipe != null)
-              SliverToBoxAdapter(child: _buildRecipeBanner(context, topRecipe.name, topRecipe.emoji)),
+              SliverToBoxAdapter(child: _buildRecipeBanner(context, topRecipe)),
             SliverToBoxAdapter(child: _buildWeekSummary()),
             const SliverToBoxAdapter(child: SizedBox(height: 100)),
           ],
@@ -34,8 +36,17 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // Fix 3: dynamic time-of-day greeting
+  String _greeting() {
+    final h = DateTime.now().hour;
+    if (h < 12) return 'Buenos días, David';
+    if (h < 20) return 'Buenas tardes, David';
+    return 'Buenas noches, David';
+  }
+
   Widget _buildHeader(DateTime now) {
-    final dayFmt = DateFormat('EEEE, MMMM d');
+    // Fix 5: Spanish locale and format
+    final dayFmt = DateFormat("EEEE, d 'de' MMMM", 'es');
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Row(
@@ -48,7 +59,8 @@ class HomeScreen extends StatelessWidget {
                 Text(dayFmt.format(now),
                     style: GoogleFonts.fredoka(fontSize: 13, color: AppColors.muted)),
                 const SizedBox(height: 2),
-                Text('Buenos días, David',
+                // Fix 3: use dynamic greeting
+                Text(_greeting(),
                     style: GoogleFonts.fredoka(
                         fontSize: 26, fontWeight: FontWeight.w600, color: AppColors.dark)),
               ],
@@ -89,7 +101,8 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
                     color: AppColors.red, borderRadius: BorderRadius.circular(10)),
-                  child: Text('${shown.length}',
+                  // Fix 4: badge shows total count, not capped count
+                  child: Text('${items.length}',
                       style: GoogleFonts.fredoka(fontSize: 12, color: AppColors.white)),
                 ),
               const Spacer(),
@@ -101,8 +114,12 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Row(
-            children: shown.map((item) => _buildExpiryChip(item)).toList(),
+          // Fix 1: wrap chip row in horizontal scroll
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: shown.map((item) => _buildExpiryChip(item)).toList(),
+            ),
           ),
         ],
       ),
@@ -147,7 +164,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRecipeBanner(BuildContext context, String name, String emoji) {
+  // Fix 2: accept full Recipe object, wire "Ver →" navigation
+  Widget _buildRecipeBanner(BuildContext context, Recipe topRecipe) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Container(
@@ -159,7 +177,7 @@ class HomeScreen extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 36)),
+            Text(topRecipe.emoji, style: const TextStyle(fontSize: 36)),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -167,18 +185,25 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Text('Receta para ti',
                       style: GoogleFonts.inter(fontSize: 11, color: AppColors.white.withValues(alpha: 0.8))),
-                  Text(name,
+                  Text(topRecipe.name,
                       style: GoogleFonts.fredoka(
                           fontSize: 17, fontWeight: FontWeight.w600, color: AppColors.white)),
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-              decoration: BoxDecoration(
-                color: AppColors.white, borderRadius: BorderRadius.circular(17)),
-              child: Text('Ver →',
-                  style: GoogleFonts.fredoka(fontSize: 13, color: AppColors.teal)),
+            GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => RecipeDetailScreen(recipe: topRecipe),
+                ),
+              ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                decoration: BoxDecoration(
+                  color: AppColors.white, borderRadius: BorderRadius.circular(17)),
+                child: Text('Ver →',
+                    style: GoogleFonts.fredoka(fontSize: 13, color: AppColors.teal)),
+              ),
             ),
           ],
         ),
