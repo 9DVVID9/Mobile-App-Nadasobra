@@ -10,6 +10,14 @@ class AppTheme {
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.teal,
         surface: AppColors.cream,
+      ).copyWith(
+        primary: AppColors.teal,
+        onPrimary: AppColors.white,
+        secondary: AppColors.gold,
+        onSecondary: AppColors.dark,
+        error: AppColors.red,
+        onError: AppColors.white,
+        onSurface: AppColors.dark,
       ),
       textTheme: _buildTextTheme(),
       inputDecorationTheme: InputDecorationTheme(
@@ -38,6 +46,7 @@ class AppTheme {
       displayMedium: GoogleFonts.fredoka(fontSize: 26, fontWeight: FontWeight.w600, color: AppColors.dark),
       displaySmall: GoogleFonts.fredoka(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.dark),
       // Headlines: Fredoka SemiBold — card titles
+      headlineLarge: GoogleFonts.fredoka(fontSize: 22, fontWeight: FontWeight.w600, color: AppColors.dark),
       headlineMedium: GoogleFonts.fredoka(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.dark),
       headlineSmall: GoogleFonts.fredoka(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.dark),
       // Body: Inter — secondary text, descriptions
