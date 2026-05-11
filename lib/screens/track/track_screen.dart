@@ -1,7 +1,180 @@
 import 'package:flutter/material.dart';
-class TrackScreen extends StatelessWidget {
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../theme/app_colors.dart';
+import '../../models/fridge_item.dart';
+import '../../services/fridge_service.dart';
+import '../../widgets/fridge_item_card.dart';
+import 'add_item_sheet.dart';
+
+class TrackScreen extends StatefulWidget {
   const TrackScreen({super.key});
+
   @override
-  Widget build(BuildContext context) => const Scaffold(
-    body: Center(child: Text('Track — coming soon')));
+  State<TrackScreen> createState() => _TrackScreenState();
+}
+
+class _TrackScreenState extends State<TrackScreen> {
+  final _service = FridgeService();
+  FoodCategory? _selectedCategory; // null = Todo
+
+  List<FridgeItem> get _filteredItems {
+    if (_selectedCategory == null) return _service.getAll();
+    return _service.getByCategory(_selectedCategory!);
+  }
+
+  void _delete(String id) {
+    setState(() => _service.remove(id));
+  }
+
+  Future<void> _openAddSheet() async {
+    HapticFeedback.lightImpact();
+    final added = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => const AddItemSheet(),
+    );
+    if (added == true) setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.cream,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTopBar(),
+            _buildSearchBar(),
+            _buildFilterChips(),
+            Expanded(child: _buildList()),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _openAddSheet,
+        backgroundColor: AppColors.teal,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add, color: Colors.white, size: 28),
+      ),
+    );
+  }
+
+  Widget _buildTopBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () => Navigator.of(context).pop(),
+            child: const Icon(Icons.arrow_back_ios_new_rounded,
+                size: 20, color: AppColors.dark),
+          ),
+          const SizedBox(width: 12),
+          Text('Tu nevera',
+              style: GoogleFonts.fredoka(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.dark)),
+          const Spacer(),
+          GestureDetector(
+            onTap: _openAddSheet,
+            child: Text('+ Añadir',
+                style: GoogleFonts.fredoka(fontSize: 14, color: AppColors.teal)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+      child: Container(
+        height: 44,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+              color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
+          boxShadow: AppColors.cardShadow,
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.search_rounded, color: AppColors.muted, size: 18),
+            const SizedBox(width: 8),
+            Text('Busca en tu nevera...',
+                style: GoogleFonts.inter(fontSize: 13, color: AppColors.muted)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterChips() {
+    // Order matches FoodCategory.values: [vegetables, dairy, proteins, other]
+    final categories = [null, ...FoodCategory.values];
+    const labels = ['Todo', 'Verduras', 'Lácteos', 'Proteínas', 'Otros'];
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+      child: Row(
+        children: List.generate(categories.length, (i) {
+          final cat = categories[i];
+          final active = _selectedCategory == cat;
+          return GestureDetector(
+            onTap: () => setState(() => _selectedCategory = cat),
+            child: Container(
+              margin: const EdgeInsets.only(right: 8),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: active ? AppColors.teal : AppColors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                    color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
+                boxShadow: AppColors.cardShadow,
+              ),
+              child: Text(labels[i],
+                  style: GoogleFonts.fredoka(
+                      fontSize: 13,
+                      color:
+                          active ? AppColors.white : AppColors.dark)),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _buildList() {
+    final items = _filteredItems;
+    if (items.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('🌿', style: TextStyle(fontSize: 48)),
+            const SizedBox(height: 12),
+            Text('¡Nada por aquí!',
+                style: GoogleFonts.fredoka(
+                    fontSize: 18, color: AppColors.muted)),
+          ],
+        ),
+      );
+    }
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
+      itemCount: items.length,
+      separatorBuilder: (context, i) => const SizedBox(height: 10),
+      itemBuilder: (_, i) => FridgeItemCard(
+        item: items[i],
+        onDelete: () => _delete(items[i].id),
+      ),
+    );
+  }
 }
