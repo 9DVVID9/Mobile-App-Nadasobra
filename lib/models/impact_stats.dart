@@ -8,12 +8,12 @@ class ImpactStats {
   final List<double> weeklyFoodSaved; // 7 values Mon→Sun
   final List<BadgeModel> badges;
 
-  const ImpactStats({
+  ImpactStats({
     required this.recipesCooked,
     required this.foodSavedKg,
     required this.moneySavedEuros,
     required this.streakDays,
     required this.weeklyFoodSaved,
     required this.badges,
-  });
+  }) : assert(weeklyFoodSaved.length == 7, 'weeklyFoodSaved must have exactly 7 values');
 }

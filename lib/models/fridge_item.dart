@@ -20,8 +20,12 @@ class FridgeItem {
     required this.expiryDate,
   }) : id = id ?? const Uuid().v4();
 
-  int get daysUntilExpiry =>
-      expiryDate.difference(DateTime.now()).inDays;
+  int get daysUntilExpiry {
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+    final expiryDateOnly = DateTime(expiryDate.year, expiryDate.month, expiryDate.day);
+    return expiryDateOnly.difference(todayDate).inDays;
+  }
 
   ExpiryStatus get expiryStatus {
     if (daysUntilExpiry <= 1) return ExpiryStatus.expiring;
@@ -30,8 +34,9 @@ class FridgeItem {
   }
 
   String get expiryLabel {
-    if (daysUntilExpiry <= 0) return 'Today!';
-    if (daysUntilExpiry == 1) return '1 day';
+    if (daysUntilExpiry < 0) return 'Caducado';
+    if (daysUntilExpiry == 0) return 'Hoy!';
+    if (daysUntilExpiry == 1) return '1 día';
     return '${daysUntilExpiry}d';
   }
 }
