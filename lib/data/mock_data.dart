@@ -4,10 +4,10 @@ import '../models/impact_stats.dart';
 import '../models/badge_model.dart';
 
 class MockData {
-  static List<FridgeItem> get fridgeItems => [
+  static final List<FridgeItem> fridgeItems = [
     FridgeItem(
       id: 'f1', name: 'Huevos', emoji: '🥚',
-      category: FoodCategory.other, quantity: '6 units',
+      category: FoodCategory.proteins, quantity: '6 units',
       expiryDate: DateTime.now().add(const Duration(days: 1)),
     ),
     FridgeItem(
@@ -37,7 +37,7 @@ class MockData {
     ),
   ];
 
-  static List<Recipe> get recipes => [
+  static final List<Recipe> recipes = [
     const Recipe(
       id: 'r1', name: 'Tortilla de Brócoli', emoji: '🍳',
       ingredientNames: ['Huevos', 'Brócoli', 'Cebolla', 'Sal'],
@@ -113,10 +113,10 @@ class MockData {
     streakDays: 5,
     weeklyFoodSaved: [0.2, 0.5, 0.3, 0.8, 0.6, 0.7, 0.3],
     badges: const [
-      BadgeModel(emoji: '🌱', name: 'First Save', earned: true),
-      BadgeModel(emoji: '🔥', name: '5 Day Streak', earned: true),
-      BadgeModel(emoji: '♻️', name: 'Zero Waste Week', earned: true),
-      BadgeModel(emoji: '⭐', name: 'Recipe Master', earned: false),
+      BadgeModel(emoji: '🌱', name: 'Primera vez', earned: true),
+      BadgeModel(emoji: '🔥', name: 'Racha de 5 días', earned: true),
+      BadgeModel(emoji: '♻️', name: 'Semana sin residuos', earned: true),
+      BadgeModel(emoji: '⭐', name: 'Maestro cocinero', earned: false),
     ],
   );
 }
