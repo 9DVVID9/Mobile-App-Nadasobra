@@ -71,8 +71,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildNav() {
-    const labels = ['Fridge', 'Recipes', 'Impact'];
-    const icons = ['🧊', '🍳', '📊'];
+    const labels = ['Track', 'Save', 'Impact'];
 
     return SafeArea(
       child: Padding(
@@ -82,10 +81,15 @@ class _MainScreenState extends State<MainScreen> {
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(32),
-            border: Border.all(color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
             boxShadow: [
-              BoxShadow(color: AppColors.dark.withValues(alpha: 0.10), offset: const Offset(0, -3), blurRadius: 16),
-              BoxShadow(color: AppColors.dark.withValues(alpha: 0.06), offset: const Offset(0, 4), blurRadius: 0),
+              BoxShadow(
+                  color: AppColors.dark.withValues(alpha: 0.10),
+                  offset: const Offset(0, -3),
+                  blurRadius: 16),
+              BoxShadow(
+                  color: AppColors.dark.withValues(alpha: 0.06),
+                  offset: const Offset(0, 4),
+                  blurRadius: 0),
             ],
           ),
           child: Row(
@@ -95,7 +99,6 @@ class _MainScreenState extends State<MainScreen> {
                 child: GestureDetector(
                   onTap: () {
                     if (_currentIndex == i) {
-                      // Pop to root of this tab on double-tap
                       _navigatorKeys[i].currentState?.popUntil((r) => r.isFirst);
                     }
                     setState(() => _currentIndex = i);
@@ -104,17 +107,26 @@ class _MainScreenState extends State<MainScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      AnimatedDefaultTextStyle(
-                        duration: const Duration(milliseconds: 200),
-                        style: TextStyle(fontSize: active ? 22 : 18),
-                        child: Text(icons[i]),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 180),
+                        width: 18,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: active
+                              ? AppColors.teal.withValues(alpha: 0.7)
+                              : AppColors.muted.withValues(alpha: 0.3),
+                        ),
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 6),
                       Text(
                         labels[i],
-                        style: active
-                            ? GoogleFonts.fredoka(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.teal)
-                            : GoogleFonts.fredoka(fontSize: 11, color: AppColors.muted),
+                        style: GoogleFonts.fredoka(
+                          fontSize: 11,
+                          fontWeight:
+                              active ? FontWeight.w600 : FontWeight.w400,
+                          color: active ? AppColors.teal : AppColors.muted,
+                        ),
                       ),
                     ],
                   ),
