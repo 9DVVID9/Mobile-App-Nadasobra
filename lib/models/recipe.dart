@@ -12,6 +12,9 @@ class Recipe {
   final String difficulty;
   final double co2SavedKg;
   final RecipeTag tag;
+  // When set, RecipeCard / detail show this asset instead of the emoji.
+  // Asset path is resolved from `assets/recipes/` registered in pubspec.yaml.
+  final String? imagePath;
 
   const Recipe({
     required this.id,
@@ -23,14 +26,24 @@ class Recipe {
     required this.difficulty,
     required this.co2SavedKg,
     required this.tag,
+    this.imagePath,
   });
 
-  // Maps tag to the card accent color strip
+  // Tile background per tag (mint / peach / sand) — Figma palette.
+  Color get tileColor {
+    switch (tag) {
+      case RecipeTag.usesExpiring: return const Color(0xFFC2EFDF); // mint
+      case RecipeTag.protein:      return const Color(0xFFFFD9C7); // peach
+      case RecipeTag.pantry:       return const Color(0xFFFFE8B3); // sand
+    }
+  }
+
+  // Legacy accent (kept for backwards compatibility — not used by new card layout).
   Color get accentColor {
     switch (tag) {
-      case RecipeTag.usesExpiring: return const Color(0xFF00C896); // teal
-      case RecipeTag.protein:      return const Color(0xFFFF7A59); // coral
-      case RecipeTag.pantry:       return const Color(0xFFFFD66B); // gold
+      case RecipeTag.usesExpiring: return const Color(0xFF00C896);
+      case RecipeTag.protein:      return const Color(0xFFFF7A59);
+      case RecipeTag.pantry:       return const Color(0xFFFFD66B);
     }
   }
 }

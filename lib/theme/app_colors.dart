@@ -12,6 +12,11 @@ class AppColors {
   static const red     = Color(0xFFED3F3F);
   static const white   = Color(0xFFFFFFFF);
 
+  // Recipe tile tints (Figma)
+  static const tileMint  = Color(0xFFC2EFDF);
+  static const tilePeach = Color(0xFFFFD9C7);
+  static const tileSand  = Color(0xFFFFE8B3);
+
   // Convenience: card shadows (reused everywhere)
   static List<BoxShadow> get cardShadow => [
     BoxShadow(color: dark.withValues(alpha: 0.08), offset: const Offset(0, 4), blurRadius: 0),

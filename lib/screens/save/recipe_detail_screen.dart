@@ -114,17 +114,34 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
 
   Widget _buildEmojiCard() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      child: Container(
-        height: 140,
-        decoration: BoxDecoration(
-          color: AppColors.teal.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-              color: AppColors.teal.withValues(alpha: 0.2), width: 1.5),
-        ),
-        child: Center(
-          child: Text(recipe.emoji, style: const TextStyle(fontSize: 72)),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+      child: Center(
+        child: Container(
+          width: 280,
+          height: 180,
+          decoration: BoxDecoration(
+            color: recipe.tileColor,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                  color: AppColors.dark.withValues(alpha: 0.12),
+                  offset: const Offset(0, 8),
+                  blurRadius: 0),
+              BoxShadow(
+                  color: AppColors.dark.withValues(alpha: 0.18),
+                  offset: const Offset(0, 20),
+                  blurRadius: 32),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: recipe.imagePath != null
+                ? Image.asset(recipe.imagePath!, fit: BoxFit.cover)
+                : Center(
+                    child: Text(recipe.emoji,
+                        style: const TextStyle(fontSize: 88)),
+                  ),
+          ),
         ),
       ),
     );

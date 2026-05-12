@@ -21,30 +21,38 @@ class RecipeCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
+              border: Border.all(
+                  color: AppColors.dark.withValues(alpha: 0.08), width: 2),
               boxShadow: AppColors.cardShadow,
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(19),
-              child: Row(
+              borderRadius: BorderRadius.circular(18),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(width: 4, color: recipe.accentColor),
+                  SizedBox(
+                    height: 100,
+                    child: _buildTile(),
+                  ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(recipe.emoji, style: const TextStyle(fontSize: 32)),
-                          const SizedBox(height: 6),
                           Text(recipe.name,
-                              maxLines: 2, overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.fredoka(
-                                  fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.dark)),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.dark)),
                           const SizedBox(height: 4),
-                          Text('${recipe.durationMinutes} min · ${recipe.difficulty}',
-                              style: GoogleFonts.inter(fontSize: 11, color: AppColors.muted)),
+                          Text(
+                              '${recipe.durationMinutes} min · ${recipe.difficulty}',
+                              style: GoogleFonts.inter(
+                                  fontSize: 11, color: AppColors.muted)),
                         ],
                       ),
                     ),
@@ -55,6 +63,18 @@ class RecipeCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  // Colored tile with centered emoji, or real image when imagePath is set.
+  Widget _buildTile() {
+    if (recipe.imagePath != null) {
+      return Image.asset(recipe.imagePath!, fit: BoxFit.cover);
+    }
+    return Container(
+      color: recipe.tileColor,
+      alignment: Alignment.center,
+      child: Text(recipe.emoji, style: const TextStyle(fontSize: 48)),
     );
   }
 }
