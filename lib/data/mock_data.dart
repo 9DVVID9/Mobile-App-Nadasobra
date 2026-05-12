@@ -60,6 +60,7 @@ class MockData {
       ],
       durationMinutes: 20, difficulty: 'Easy', co2SavedKg: 0.3,
       tag: RecipeTag.usesExpiring,
+      imagePath: 'assets/recipes/pasta-con-tomate.jpeg',
     ),
     const Recipe(
       id: 'r3', name: 'Pollo a la Plancha', emoji: '🍗',
