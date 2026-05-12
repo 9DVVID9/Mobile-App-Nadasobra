@@ -136,7 +136,7 @@ class HomeScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(right: 12),
       width: 104,
-      height: 60,
+      height: 68,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
@@ -165,18 +165,19 @@ class HomeScreen extends StatelessWidget {
                   style: GoogleFonts.inter(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
+                      height: 1.2,
                       color: AppColors.dark),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Padding(
             padding: const EdgeInsets.only(left: 16),
             child: Text(
               item.expiryLabel,
-              style:
-                  GoogleFonts.inter(fontSize: 11, color: AppColors.muted),
+              style: GoogleFonts.inter(
+                  fontSize: 11, height: 1.2, color: AppColors.muted),
             ),
           ),
         ],

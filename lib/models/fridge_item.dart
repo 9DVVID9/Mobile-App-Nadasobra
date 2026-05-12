@@ -29,7 +29,7 @@ class FridgeItem {
 
   ExpiryStatus get expiryStatus {
     if (daysUntilExpiry <= 1) return ExpiryStatus.expiring;
-    if (daysUntilExpiry <= 3) return ExpiryStatus.soonExpiring;
+    if (daysUntilExpiry <= 2) return ExpiryStatus.soonExpiring;
     return ExpiryStatus.fresh;
   }
 
