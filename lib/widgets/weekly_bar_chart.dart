@@ -46,11 +46,10 @@ class WeeklyBarChart extends StatelessWidget {
               barRods: [
                 BarChartRodData(
                   toY: values[i],
-                  width: 38,
-                  borderRadius: BorderRadius.circular(10),
-                  color: i == todayIndex
-                      ? AppColors.gold
-                      : AppColors.teal.withValues(alpha: 0.6),
+                  width: 30,
+                  borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(8)),
+                  color: i == todayIndex ? AppColors.gold : AppColors.teal,
                 ),
               ],
             ),
