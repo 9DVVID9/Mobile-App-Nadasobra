@@ -43,12 +43,12 @@ class ImpactScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Tu impacto',
+          Text('Your impact',
               style: GoogleFonts.fredoka(
                   fontSize: 26,
                   fontWeight: FontWeight.w600,
                   color: AppColors.dark)),
-          Text('Esta semana',
+          Text('This week',
               style: GoogleFonts.inter(fontSize: 13, color: AppColors.muted)),
         ],
       ),
@@ -63,7 +63,7 @@ class ImpactScreen extends StatelessWidget {
           Expanded(
             child: StatCard(
                 value: '$recipes',
-                label: 'Recetas cocinadas',
+                label: 'Recipes cooked',
                 emoji: '🍳',
                 tint: AppColors.gold),
           ),
@@ -71,7 +71,7 @@ class ImpactScreen extends StatelessWidget {
           Expanded(
             child: StatCard(
                 value: '${food}kg',
-                label: 'Comida guardada',
+                label: 'Food saved',
                 emoji: '🌱',
                 tint: AppColors.teal),
           ),
@@ -79,7 +79,7 @@ class ImpactScreen extends StatelessWidget {
           Expanded(
             child: StatCard(
                 value: '€${money.toStringAsFixed(0)}',
-                label: 'Dinero ahorrado',
+                label: 'Money saved',
                 emoji: '💶',
                 tint: AppColors.coral),
           ),
@@ -103,7 +103,7 @@ class ImpactScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Comida guardada (kg)',
+            Text('Food saved (kg)',
                 style: GoogleFonts.fredoka(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -134,12 +134,12 @@ class ImpactScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('¡$streak días seguidos!',
+                Text('$streak-day streak!',
                     style: GoogleFonts.fredoka(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
                         color: AppColors.dark)),
-                Text('¡Sigue así, lo estás haciendo genial!',
+                Text('Keep it up, you\'re doing great!',
                     style: GoogleFonts.inter(
                         fontSize: 12, color: AppColors.muted)),
               ],
@@ -156,7 +156,7 @@ class ImpactScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Logros',
+          Text('Achievements',
               style: GoogleFonts.fredoka(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,

@@ -34,9 +34,9 @@ class FridgeItem {
   }
 
   String get expiryLabel {
-    if (daysUntilExpiry < 0) return 'Caducado';
-    if (daysUntilExpiry == 0) return 'Hoy!';
-    if (daysUntilExpiry == 1) return '1 día';
+    if (daysUntilExpiry < 0) return 'Expired';
+    if (daysUntilExpiry == 0) return 'Today!';
+    if (daysUntilExpiry == 1) return '1 day';
     return '${daysUntilExpiry}d';
   }
 }

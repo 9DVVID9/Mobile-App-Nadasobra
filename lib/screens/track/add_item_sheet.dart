@@ -26,10 +26,10 @@ class _AddItemSheetState extends State<AddItemSheet> {
   };
 
   static const _categoryLabels = {
-    FoodCategory.vegetables: 'Verduras',
-    FoodCategory.dairy: 'Lácteos',
-    FoodCategory.proteins: 'Proteínas',
-    FoodCategory.other: 'Otros',
+    FoodCategory.vegetables: 'Veggies',
+    FoodCategory.dairy: 'Dairy',
+    FoodCategory.proteins: 'Proteins',
+    FoodCategory.other: 'Other',
   };
 
   @override
@@ -46,7 +46,7 @@ class _AddItemSheetState extends State<AddItemSheet> {
       emoji: _categoryEmojis[_category]!,
       category: _category,
       quantity: _quantityController.text.trim().isEmpty
-          ? '1 ud.'
+          ? '1 unit'
           : _quantityController.text.trim(),
       expiryDate: _expiryDate,
     ));
@@ -93,15 +93,15 @@ class _AddItemSheetState extends State<AddItemSheet> {
             ),
           ),
           const SizedBox(height: 20),
-          Text('Añadir a la nevera',
+          Text('Add to fridge',
               style: GoogleFonts.fredoka(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
                   color: AppColors.dark)),
           const SizedBox(height: 20),
-          _inputField(_nameController, 'Nombre del producto', '🥕 ej. Zanahorias'),
+          _inputField(_nameController, 'Product name', '🥕 e.g. Carrots'),
           const SizedBox(height: 12),
-          _inputField(_quantityController, 'Cantidad', 'ej. 3 unidades, 500g'),
+          _inputField(_quantityController, 'Quantity', 'e.g. 3 units, 500g'),
           const SizedBox(height: 12),
           _datePicker(),
           const SizedBox(height: 16),
@@ -119,7 +119,7 @@ class _AddItemSheetState extends State<AddItemSheet> {
                     borderRadius: BorderRadius.circular(20)),
                 elevation: 0,
               ),
-              child: Text('Añadir a la nevera',
+              child: Text('Add to fridge',
                   style: GoogleFonts.fredoka(
                       fontSize: 16, fontWeight: FontWeight.w600)),
             ),
@@ -160,7 +160,7 @@ class _AddItemSheetState extends State<AddItemSheet> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Caduca el',
+                Text('Expires on',
                     style: GoogleFonts.inter(
                         fontSize: 11, color: AppColors.muted)),
                 Text(

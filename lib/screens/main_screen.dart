@@ -71,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildNav() {
-    const labels = ['Nevera', 'Recetas', 'Impacto'];
+    const labels = ['Fridge', 'Recipes', 'Impact'];
     const icons = ['🧊', '🍳', '📊'];
 
     return SafeArea(

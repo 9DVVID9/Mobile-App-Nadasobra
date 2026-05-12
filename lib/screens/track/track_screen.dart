@@ -16,7 +16,7 @@ class TrackScreen extends StatefulWidget {
 
 class _TrackScreenState extends State<TrackScreen> {
   final _service = FridgeService();
-  FoodCategory? _selectedCategory; // null = Todo
+  FoodCategory? _selectedCategory; // null = All
 
   List<FridgeItem> get _filteredItems {
     if (_selectedCategory == null) return _service.getAll();
@@ -73,7 +73,7 @@ class _TrackScreenState extends State<TrackScreen> {
                 size: 20, color: AppColors.dark),
           ),
           const SizedBox(width: 12),
-          Text('Tu nevera',
+          Text('Your fridge',
               style: GoogleFonts.fredoka(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
@@ -81,7 +81,7 @@ class _TrackScreenState extends State<TrackScreen> {
           const Spacer(),
           GestureDetector(
             onTap: _openAddSheet,
-            child: Text('+ Añadir',
+            child: Text('+ Add',
                 style: GoogleFonts.fredoka(fontSize: 14, color: AppColors.teal)),
           ),
         ],
@@ -106,7 +106,7 @@ class _TrackScreenState extends State<TrackScreen> {
           children: [
             const Icon(Icons.search_rounded, color: AppColors.muted, size: 18),
             const SizedBox(width: 8),
-            Text('Busca en tu nevera...',
+            Text('Search your fridge...',
                 style: GoogleFonts.inter(fontSize: 13, color: AppColors.muted)),
           ],
         ),
@@ -117,7 +117,7 @@ class _TrackScreenState extends State<TrackScreen> {
   Widget _buildFilterChips() {
     // Order matches FoodCategory.values: [vegetables, dairy, proteins, other]
     final categories = [null, ...FoodCategory.values];
-    const labels = ['Todo', 'Verduras', 'Lácteos', 'Proteínas', 'Otros'];
+    const labels = ['All', 'Veggies', 'Dairy', 'Proteins', 'Other'];
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -160,7 +160,7 @@ class _TrackScreenState extends State<TrackScreen> {
           children: [
             const Text('🌿', style: TextStyle(fontSize: 48)),
             const SizedBox(height: 12),
-            Text('¡Nada por aquí!',
+            Text('Nothing here yet!',
                 style: GoogleFonts.fredoka(
                     fontSize: 18, color: AppColors.muted)),
           ],

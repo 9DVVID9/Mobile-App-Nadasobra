@@ -36,17 +36,16 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Fix 3: dynamic time-of-day greeting
+  // Time-of-day greeting
   String _greeting() {
     final h = DateTime.now().hour;
-    if (h < 12) return 'Buenos días, David';
-    if (h < 20) return 'Buenas tardes, David';
-    return 'Buenas noches, David';
+    if (h < 12) return 'Good morning, David';
+    if (h < 20) return 'Good afternoon, David';
+    return 'Good evening, David';
   }
 
   Widget _buildHeader(DateTime now) {
-    // Fix 5: Spanish locale and format
-    final dayFmt = DateFormat("EEEE, d 'de' MMMM", 'es');
+    final dayFmt = DateFormat('EEEE, MMMM d');
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Row(
@@ -92,7 +91,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text('Por caducar',
+              Text('Expiring soon',
                   style: GoogleFonts.fredoka(
                       fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.dark)),
               const SizedBox(width: 8),
@@ -108,7 +107,7 @@ class HomeScreen extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                 onTap: onGoToFridge,
-                child: Text('Ver todo →',
+                child: Text('View all →',
                     style: GoogleFonts.inter(fontSize: 12, color: AppColors.teal)),
               ),
             ],
@@ -183,7 +182,7 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Receta para ti',
+                  Text('Recipe for you',
                       style: GoogleFonts.inter(fontSize: 11, color: AppColors.white.withValues(alpha: 0.8))),
                   Text(topRecipe.name,
                       style: GoogleFonts.fredoka(
@@ -201,7 +200,7 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                 decoration: BoxDecoration(
                   color: AppColors.white, borderRadius: BorderRadius.circular(17)),
-                child: Text('Ver →',
+                child: Text('View →',
                     style: GoogleFonts.fredoka(fontSize: 13, color: AppColors.teal)),
               ),
             ),
@@ -225,13 +224,13 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Tu semana',
+            Text('Your week',
                 style: GoogleFonts.fredoka(
                     fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.dark)),
             const SizedBox(height: 14),
             Row(
               children: [
-                _pill('🌱 3.4 kg salvados', AppColors.gold),
+                _pill('🌱 3.4 kg saved', AppColors.gold),
                 const SizedBox(width: 10),
                 _pill('♻️ 1.2 kg CO₂', AppColors.teal),
               ],

@@ -7,7 +7,7 @@ class WeeklyBarChart extends StatelessWidget {
   final List<double> values; // 7 values Mon→Sun
   const WeeklyBarChart({super.key, required this.values});
 
-  static const _days = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+  static const _days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   @override
   Widget build(BuildContext context) {

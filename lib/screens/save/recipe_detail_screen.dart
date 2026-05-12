@@ -117,7 +117,7 @@ class RecipeDetailScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Ingredientes',
+          Text('Ingredients',
               style: GoogleFonts.fredoka(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -172,7 +172,7 @@ class RecipeDetailScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Pasos',
+          Text('Steps',
               style: GoogleFonts.fredoka(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -253,7 +253,7 @@ class RecipeDetailScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20)),
             elevation: 0,
           ),
-          child: Text('¡Ya cocinado! ✓',
+          child: Text('Mark as cooked ✓',
               style: GoogleFonts.fredoka(
                   fontSize: 16, fontWeight: FontWeight.w600)),
         ),

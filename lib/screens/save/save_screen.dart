@@ -57,7 +57,7 @@ class _SaveScreenState extends State<SaveScreen> {
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Row(
         children: [
-          Text('Recetas',
+          Text('Recipes',
               style: GoogleFonts.fredoka(
                   fontSize: 26,
                   fontWeight: FontWeight.w600,
@@ -97,7 +97,7 @@ class _SaveScreenState extends State<SaveScreen> {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Con lo que tienes · $matchCount recetas posibles',
+                'With what you have · $matchCount possible recipes',
                 style: GoogleFonts.fredoka(fontSize: 13, color: AppColors.dark),
               ),
             ),
@@ -110,7 +110,7 @@ class _SaveScreenState extends State<SaveScreen> {
   }
 
   Widget _buildFilterChips() {
-    const chips = ['Todas', 'Con mi nevera', 'Rápidas (<20 min)', 'Vegetarianas'];
+    const chips = ['All', 'With my fridge', 'Quick (<20 min)', 'Vegetarian'];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
