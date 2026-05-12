@@ -6,6 +6,7 @@ import '../../models/fridge_item.dart';
 import '../../models/recipe.dart';
 import '../../services/fridge_service.dart';
 import '../../services/recipe_service.dart';
+import '../../services/impact_service.dart';
 import '../save/recipe_detail_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -133,75 +134,111 @@ class HomeScreen extends StatelessWidget {
             : AppColors.green;
 
     return Container(
-      margin: const EdgeInsets.only(right: 8),
-      width: 104, height: 60,
+      margin: const EdgeInsets.only(right: 12),
+      width: 104,
+      height: 60,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
+        border:
+            Border.all(color: AppColors.dark.withValues(alpha: 0.08), width: 2),
         boxShadow: AppColors.cardShadow,
       ),
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(item.emoji, style: const TextStyle(fontSize: 18)),
-          const SizedBox(height: 2),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 6, height: 6,
-                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+                width: 10,
+                height: 10,
+                decoration:
+                    BoxDecoration(color: color, shape: BoxShape.circle),
               ),
-              const SizedBox(width: 4),
-              Text(item.expiryLabel,
-                  style: GoogleFonts.inter(fontSize: 11, color: AppColors.muted)),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  item.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.dark),
+                ),
+              ),
             ],
+          ),
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Text(
+              item.expiryLabel,
+              style:
+                  GoogleFonts.inter(fontSize: 11, color: AppColors.muted),
+            ),
           ),
         ],
       ),
     );
   }
 
-  // Fix 2: accept full Recipe object, wire "Ver →" navigation
+  // Recipe banner with caption/title/subtitle stacked + CTA pill on right
   Widget _buildRecipeBanner(BuildContext context, Recipe topRecipe) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(20, 16, 16, 16),
         decoration: BoxDecoration(
           color: AppColors.teal,
           borderRadius: BorderRadius.circular(24),
           boxShadow: AppColors.elevatedShadow,
         ),
-        child: Row(
+        child: Stack(
           children: [
-            Text(topRecipe.emoji, style: const TextStyle(fontSize: 36)),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Recipe for you',
-                      style: GoogleFonts.inter(fontSize: 11, color: AppColors.white.withValues(alpha: 0.8))),
-                  Text(topRecipe.name,
-                      style: GoogleFonts.fredoka(
-                          fontSize: 17, fontWeight: FontWeight.w600, color: AppColors.white)),
-                ],
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('What to cook today?',
+                    style: GoogleFonts.inter(
+                        fontSize: 12, color: AppColors.white)),
+                const SizedBox(height: 6),
+                Text(topRecipe.name,
+                    style: GoogleFonts.fredoka(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.white)),
+                const SizedBox(height: 6),
+                Text('With what you have at home',
+                    style: GoogleFonts.inter(
+                        fontSize: 13,
+                        color: AppColors.white.withValues(alpha: 0.8))),
+              ],
             ),
-            GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => RecipeDetailScreen(recipe: topRecipe),
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => RecipeDetailScreen(recipe: topRecipe),
+                  ),
                 ),
-              ),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-                decoration: BoxDecoration(
-                  color: AppColors.white, borderRadius: BorderRadius.circular(17)),
-                child: Text('View →',
-                    style: GoogleFonts.fredoka(fontSize: 13, color: AppColors.teal)),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14, vertical: 9),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(17),
+                  ),
+                  child: Text('View recipe →',
+                      style: GoogleFonts.inter(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.teal)),
+                ),
               ),
             ),
           ],
@@ -211,28 +248,41 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildWeekSummary() {
+    final stats = ImpactService().getStats();
+    final foodLabel = stats.foodSavedKg < 1
+        ? '${(stats.foodSavedKg * 1000).round()}g saved'
+        : '${stats.foodSavedKg}kg saved';
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
+          border: Border.all(
+              color: AppColors.dark.withValues(alpha: 0.08), width: 2),
           boxShadow: AppColors.cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Your week',
-                style: GoogleFonts.fredoka(
-                    fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.dark)),
-            const SizedBox(height: 14),
+                style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.dark)),
+            const SizedBox(height: 10),
+            Container(
+                height: 1, color: AppColors.dark.withValues(alpha: 0.06)),
+            const SizedBox(height: 10),
             Row(
               children: [
-                _pill('🌱 3.4 kg saved', AppColors.gold),
+                Expanded(
+                    child: _pill(
+                        '${stats.recipesCooked} recipes cooked', AppColors.gold)),
                 const SizedBox(width: 10),
-                _pill('♻️ 1.2 kg CO₂', AppColors.teal),
+                Expanded(child: _pill(foodLabel, AppColors.teal)),
               ],
             ),
           ],
@@ -243,13 +293,16 @@ class HomeScreen extends StatelessWidget {
 
   Widget _pill(String label, Color color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.18),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Text(label,
-          style: GoogleFonts.fredoka(fontSize: 13, color: AppColors.dark)),
+          style: GoogleFonts.fredoka(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: AppColors.dark)),
     );
   }
 }
