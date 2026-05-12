@@ -11,6 +11,46 @@ class FridgeItemCard extends StatelessWidget {
 
   const FridgeItemCard({super.key, required this.item, required this.onDelete});
 
+  Future<void> _confirmDelete(BuildContext context) async {
+    HapticFeedback.selectionClick();
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text('Delete ${item.name}?',
+            style: GoogleFonts.fredoka(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: AppColors.dark)),
+        content: Text('This item will be removed from your fridge.',
+            style: GoogleFonts.inter(fontSize: 13, color: AppColors.muted)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text('Cancel',
+                style: GoogleFonts.fredoka(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.muted)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text('Delete',
+                style: GoogleFonts.fredoka(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.red)),
+          ),
+        ],
+      ),
+    );
+    if (shouldDelete == true) {
+      HapticFeedback.mediumImpact();
+      onDelete();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dismissible(
@@ -29,33 +69,36 @@ class FridgeItemCard extends StatelessWidget {
         ),
         child: const Icon(Icons.delete_outline_rounded, color: AppColors.red, size: 24),
       ),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
-          boxShadow: AppColors.cardShadow,
-        ),
-        child: Row(
-          children: [
-            Text(item.emoji, style: const TextStyle(fontSize: 28)),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(item.name,
-                      style: GoogleFonts.fredoka(
-                          fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.dark)),
-                  const SizedBox(height: 2),
-                  Text(item.quantity,
-                      style: GoogleFonts.inter(fontSize: 12, color: AppColors.muted)),
-                ],
+      child: GestureDetector(
+        onLongPress: () => _confirmDelete(context),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
+            boxShadow: AppColors.cardShadow,
+          ),
+          child: Row(
+            children: [
+              Text(item.emoji, style: const TextStyle(fontSize: 28)),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(item.name,
+                        style: GoogleFonts.fredoka(
+                            fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.dark)),
+                    const SizedBox(height: 2),
+                    Text(item.quantity,
+                        style: GoogleFonts.inter(fontSize: 12, color: AppColors.muted)),
+                  ],
+                ),
               ),
-            ),
-            ExpiryBadge(item: item),
-          ],
+              ExpiryBadge(item: item),
+            ],
+          ),
         ),
       ),
     );
