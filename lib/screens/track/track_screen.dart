@@ -115,13 +115,19 @@ class _TrackScreenState extends State<TrackScreen> {
   }
 
   Widget _buildFilterChips() {
-    // Order matches FoodCategory.values: [vegetables, dairy, proteins, other]
-    final categories = [null, ...FoodCategory.values];
-    const labels = ['All', 'Veggies', 'Dairy', 'Proteins', 'Other'];
+    // Order per Figma: All / Dairy / Vegetables / Proteins / Other
+    const categories = [
+      null,
+      FoodCategory.dairy,
+      FoodCategory.vegetables,
+      FoodCategory.proteins,
+      FoodCategory.other,
+    ];
+    const labels = ['All', 'Dairy', 'Vegetables', 'Proteins', 'Other'];
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Row(
         children: List.generate(categories.length, (i) {
           final cat = categories[i];
@@ -131,19 +137,21 @@ class _TrackScreenState extends State<TrackScreen> {
             child: Container(
               margin: const EdgeInsets.only(right: 8),
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
               decoration: BoxDecoration(
                 color: active ? AppColors.teal : AppColors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                    color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
-                boxShadow: AppColors.cardShadow,
+                borderRadius: BorderRadius.circular(18),
+                border: active
+                    ? null
+                    : Border.all(
+                        color: AppColors.dark.withValues(alpha: 0.08),
+                        width: 2),
               ),
               child: Text(labels[i],
                   style: GoogleFonts.fredoka(
                       fontSize: 13,
-                      color:
-                          active ? AppColors.white : AppColors.dark)),
+                      fontWeight: active ? FontWeight.w600 : FontWeight.w500,
+                      color: active ? AppColors.white : AppColors.dark)),
             ),
           );
         }),

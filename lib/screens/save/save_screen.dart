@@ -197,28 +197,33 @@ class _SaveScreenState extends State<SaveScreen> {
   }
 
   Widget _buildFilterChips() {
-    const chips = ['All', 'With my fridge', 'Quick (<20 min)', 'Vegetarian'];
+    const chips = ['With what I have ✓', 'Quick', 'Vegetarian', 'Under 30 min'];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Row(
         children: List.generate(chips.length, (i) {
-          final active = i == 0 ? !_onlyWithFridge : (i == 1 ? _onlyWithFridge : false);
+          final active = i == 0 ? _onlyWithFridge : false;
           return GestureDetector(
-            onTap: () => setState(() => _onlyWithFridge = i == 1),
+            onTap: () {
+              if (i == 0) setState(() => _onlyWithFridge = !_onlyWithFridge);
+            },
             child: Container(
               margin: const EdgeInsets.only(right: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
               decoration: BoxDecoration(
                 color: active ? AppColors.teal : AppColors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                    color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
-                boxShadow: AppColors.cardShadow,
+                borderRadius: BorderRadius.circular(18),
+                border: active
+                    ? null
+                    : Border.all(
+                        color: AppColors.dark.withValues(alpha: 0.08),
+                        width: 2),
               ),
               child: Text(chips[i],
                   style: GoogleFonts.fredoka(
                       fontSize: 13,
+                      fontWeight: active ? FontWeight.w600 : FontWeight.w500,
                       color: active ? AppColors.white : AppColors.dark)),
             ),
           );

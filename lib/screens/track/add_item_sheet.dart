@@ -26,7 +26,7 @@ class _AddItemSheetState extends State<AddItemSheet> {
   };
 
   static const _categoryLabels = {
-    FoodCategory.vegetables: 'Veggies',
+    FoodCategory.vegetables: 'Vegetables',
     FoodCategory.dairy: 'Dairy',
     FoodCategory.proteins: 'Proteins',
     FoodCategory.other: 'Other',
@@ -179,30 +179,38 @@ class _AddItemSheetState extends State<AddItemSheet> {
   }
 
   Widget _categoryRow() {
+    // Order per Figma: Dairy / Vegetables / Proteins / Other
+    const order = [
+      FoodCategory.dairy,
+      FoodCategory.vegetables,
+      FoodCategory.proteins,
+      FoodCategory.other,
+    ];
     return Wrap(
       spacing: 8,
       runSpacing: 8,
-      children: FoodCategory.values.map((cat) {
+      children: order.map((cat) {
         final active = _category == cat;
         return GestureDetector(
           onTap: () => setState(() => _category = cat),
           child: Container(
             padding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
             decoration: BoxDecoration(
-              color: active ? AppColors.teal : AppColors.cream,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: active
-                    ? AppColors.teal
-                    : AppColors.dark.withValues(alpha: 0.08),
-                width: 1.5,
-              ),
+              color: active ? AppColors.teal : AppColors.white,
+              borderRadius: BorderRadius.circular(18),
+              border: active
+                  ? null
+                  : Border.all(
+                      color: AppColors.dark.withValues(alpha: 0.08),
+                      width: 2,
+                    ),
             ),
             child: Text(
-              '${_categoryEmojis[cat]} ${_categoryLabels[cat]}',
+              _categoryLabels[cat]!,
               style: GoogleFonts.fredoka(
                   fontSize: 13,
+                  fontWeight: active ? FontWeight.w600 : FontWeight.w500,
                   color: active ? AppColors.white : AppColors.dark),
             ),
           ),
