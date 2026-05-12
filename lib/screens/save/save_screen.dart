@@ -15,10 +15,41 @@ class SaveScreen extends StatefulWidget {
 
 class _SaveScreenState extends State<SaveScreen> {
   final _service = RecipeService();
+  final _searchController = TextEditingController();
+  final _searchFocus = FocusNode();
   bool _onlyWithFridge = false;
+  bool _searchOpen = false;
+  String _searchQuery = '';
 
-  List<Recipe> get _recipes =>
-      _onlyWithFridge ? _service.filterByFridgeIngredients() : _service.getAll();
+  // Search overrides fridge filter when active; otherwise the existing toggle wins.
+  List<Recipe> get _recipes {
+    if (_searchQuery.isNotEmpty) {
+      final q = _searchQuery.toLowerCase();
+      return _service.getAll().where((r) => r.name.toLowerCase().contains(q)).toList();
+    }
+    return _onlyWithFridge ? _service.filterByFridgeIngredients() : _service.getAll();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _searchFocus.dispose();
+    super.dispose();
+  }
+
+  void _toggleSearch() {
+    setState(() {
+      _searchOpen = !_searchOpen;
+      if (!_searchOpen) {
+        _searchController.clear();
+        _searchQuery = '';
+        _searchFocus.unfocus();
+      }
+    });
+    if (_searchOpen) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _searchFocus.requestFocus());
+    }
+  }
 
   void _openDetail(Recipe recipe) {
     Navigator.of(context).push(
@@ -40,8 +71,8 @@ class _SaveScreenState extends State<SaveScreen> {
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(child: _buildHeader()),
-            SliverToBoxAdapter(child: _buildBanner()),
-            SliverToBoxAdapter(child: _buildFilterChips()),
+            if (!_searchOpen) SliverToBoxAdapter(child: _buildBanner()),
+            if (!_searchOpen) SliverToBoxAdapter(child: _buildFilterChips()),
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
               sliver: _buildGrid(),
@@ -53,6 +84,59 @@ class _SaveScreenState extends State<SaveScreen> {
   }
 
   Widget _buildHeader() {
+    if (_searchOpen) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 44,
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                      color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
+                  boxShadow: AppColors.cardShadow,
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.search_rounded,
+                        color: AppColors.muted, size: 18),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        focusNode: _searchFocus,
+                        onChanged: (v) => setState(() => _searchQuery = v),
+                        style: GoogleFonts.inter(
+                            fontSize: 14, color: AppColors.dark),
+                        decoration: InputDecoration(
+                          hintText: 'Search recipes...',
+                          hintStyle: GoogleFonts.inter(
+                              fontSize: 13, color: AppColors.muted),
+                          border: InputBorder.none,
+                          isCollapsed: true,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            GestureDetector(
+              onTap: _toggleSearch,
+              child: Text('Cancel',
+                  style: GoogleFonts.fredoka(
+                      fontSize: 14, color: AppColors.teal)),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Row(
@@ -63,17 +147,20 @@ class _SaveScreenState extends State<SaveScreen> {
                   fontWeight: FontWeight.w600,
                   color: AppColors.dark)),
           const Spacer(),
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                  color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
-              boxShadow: AppColors.cardShadow,
+          GestureDetector(
+            onTap: _toggleSearch,
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                    color: AppColors.dark.withValues(alpha: 0.08), width: 1.5),
+                boxShadow: AppColors.cardShadow,
+              ),
+              child: const Icon(Icons.search_rounded,
+                  color: AppColors.muted, size: 20),
             ),
-            child: const Icon(Icons.search_rounded,
-                color: AppColors.muted, size: 20),
           ),
         ],
       ),
@@ -140,8 +227,27 @@ class _SaveScreenState extends State<SaveScreen> {
     );
   }
 
-  SliverGrid _buildGrid() {
+  // Returns a sliver — either the grid or an empty-state placeholder.
+  Widget _buildGrid() {
     final recipes = _recipes;
+    if (recipes.isEmpty) {
+      return SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 60),
+          child: Center(
+            child: Column(
+              children: [
+                const Text('🔍', style: TextStyle(fontSize: 48)),
+                const SizedBox(height: 12),
+                Text('No recipes match',
+                    style: GoogleFonts.fredoka(
+                        fontSize: 16, color: AppColors.muted)),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     return SliverGrid(
       delegate: SliverChildBuilderDelegate(
         (_, i) => RecipeCard(
