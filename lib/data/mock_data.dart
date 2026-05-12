@@ -48,6 +48,7 @@ class MockData {
       ],
       durationMinutes: 15, difficulty: 'Easy', co2SavedKg: 0.4,
       tag: RecipeTag.usesExpiring,
+      imagePath: 'assets/recipes/tortilla-de-brocoli.jpg',
     ),
     const Recipe(
       id: 'r2', name: 'Pasta con Tomate', emoji: '🍝',
@@ -70,6 +71,7 @@ class MockData {
       ],
       durationMinutes: 25, difficulty: 'Medium', co2SavedKg: 0.6,
       tag: RecipeTag.protein,
+      imagePath: 'assets/recipes/pollo.jpg',
     ),
     const Recipe(
       id: 'r4', name: 'Queso Gratinado', emoji: '🧀',
@@ -81,6 +83,7 @@ class MockData {
       ],
       durationMinutes: 10, difficulty: 'Easy', co2SavedKg: 0.2,
       tag: RecipeTag.usesExpiring,
+      imagePath: 'assets/recipes/gratinado.jpg',
     ),
     const Recipe(
       id: 'r5', name: 'Arroz con Verduras', emoji: '🍚',
@@ -92,6 +95,7 @@ class MockData {
       ],
       durationMinutes: 25, difficulty: 'Easy', co2SavedKg: 0.5,
       tag: RecipeTag.pantry,
+      imagePath: 'assets/recipes/apetitoso-arroz.jpg',
     ),
     const Recipe(
       id: 'r6', name: 'Revuelto de Huevos', emoji: '🥗',
@@ -103,6 +107,7 @@ class MockData {
       ],
       durationMinutes: 10, difficulty: 'Easy', co2SavedKg: 0.35,
       tag: RecipeTag.usesExpiring,
+      imagePath: 'assets/recipes/revuelto-de-huevo.jpg',
     ),
   ];
 
