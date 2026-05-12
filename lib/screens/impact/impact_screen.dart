@@ -122,26 +122,26 @@ class ImpactScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppColors.gold.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: AppColors.gold, width: 1.5),
+          color: AppColors.gold,
+          borderRadius: BorderRadius.circular(20),
           boxShadow: AppColors.cardShadow,
         ),
         child: Row(
           children: [
-            const Text('🔥', style: TextStyle(fontSize: 36)),
+            const Text('🔥', style: TextStyle(fontSize: 40)),
             const SizedBox(width: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('$streak-day streak!',
+                Text('$streak day streak',
                     style: GoogleFonts.fredoka(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: AppColors.dark)),
-                Text('Keep it up, you\'re doing great!',
+                const SizedBox(height: 4),
+                Text('Cook tomorrow to keep going!',
                     style: GoogleFonts.inter(
-                        fontSize: 12, color: AppColors.muted)),
+                        fontSize: 12, color: AppColors.dark)),
               ],
             ),
           ],
