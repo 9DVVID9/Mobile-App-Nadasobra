@@ -11,6 +11,15 @@ class FridgeItemCard extends StatelessWidget {
 
   const FridgeItemCard({super.key, required this.item, required this.onDelete});
 
+  Color get _iconBg {
+    switch (item.category) {
+      case FoodCategory.vegetables: return AppColors.tintVegetable;
+      case FoodCategory.dairy:      return AppColors.tintDairy;
+      case FoodCategory.proteins:   return AppColors.tintProtein;
+      case FoodCategory.other:      return AppColors.tintOther;
+    }
+  }
+
   Future<void> _confirmDelete(BuildContext context) async {
     HapticFeedback.selectionClick();
     final shouldDelete = await showDialog<bool>(
@@ -81,7 +90,16 @@ class FridgeItemCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Text(item.emoji, style: const TextStyle(fontSize: 28)),
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: _iconBg,
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: Text(item.emoji, style: const TextStyle(fontSize: 24)),
+              ),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(

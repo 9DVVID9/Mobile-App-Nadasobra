@@ -17,6 +17,12 @@ class AppColors {
   static const tilePeach = Color(0xFFFFD9C7);
   static const tileSand  = Color(0xFFFFE8B3);
 
+  // Category icon backgrounds (used on fridge item cards)
+  static const tintVegetable = Color(0xFFC2EFDF); // mint
+  static const tintDairy     = Color(0xFFE6F0FA); // soft sky
+  static const tintProtein   = Color(0xFFFFD9C7); // peach
+  static const tintOther     = Color(0xFFFFE8B3); // sand
+
   // Convenience: card shadows (reused everywhere)
   static List<BoxShadow> get cardShadow => [
     BoxShadow(color: dark.withValues(alpha: 0.08), offset: const Offset(0, 4), blurRadius: 0),
