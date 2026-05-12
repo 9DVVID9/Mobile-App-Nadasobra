@@ -3,9 +3,28 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_colors.dart';
 import '../../models/recipe.dart';
 
-class RecipeDetailScreen extends StatelessWidget {
+class RecipeDetailScreen extends StatefulWidget {
   final Recipe recipe;
   const RecipeDetailScreen({super.key, required this.recipe});
+
+  @override
+  State<RecipeDetailScreen> createState() => _RecipeDetailScreenState();
+}
+
+class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+  final Set<int> _checkedIngredients = {};
+
+  Recipe get recipe => widget.recipe;
+
+  void _toggleIngredient(int index) {
+    setState(() {
+      if (_checkedIngredients.contains(index)) {
+        _checkedIngredients.remove(index);
+      } else {
+        _checkedIngredients.add(index);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,40 +143,48 @@ class RecipeDetailScreen extends StatelessWidget {
                   color: AppColors.dark)),
           const SizedBox(height: 12),
           ...recipe.ingredientNames.asMap().entries.map((e) {
-            final checked = e.key < 2; // first 2 pre-checked for visual demo
+            final checked = _checkedIngredients.contains(e.key);
             return Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                children: [
-                  Container(
-                    width: 22,
-                    height: 22,
-                    decoration: BoxDecoration(
-                      color: checked ? AppColors.teal : AppColors.white,
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                        color: checked
-                            ? AppColors.teal
-                            : AppColors.dark.withValues(alpha: 0.15),
-                        width: 1.5,
+              padding: const EdgeInsets.only(bottom: 4),
+              child: InkWell(
+                onTap: () => _toggleIngredient(e.key),
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                          color: checked ? AppColors.teal : AppColors.white,
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: checked
+                                ? AppColors.teal
+                                : AppColors.dark.withValues(alpha: 0.15),
+                            width: 1.5,
+                          ),
+                        ),
+                        child: checked
+                            ? const Icon(Icons.check_rounded,
+                                color: Colors.white, size: 14)
+                            : null,
                       ),
-                    ),
-                    child: checked
-                        ? const Icon(Icons.check_rounded,
-                            color: Colors.white, size: 14)
-                        : null,
+                      const SizedBox(width: 12),
+                      Text(
+                        e.value,
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          color: checked ? AppColors.muted : AppColors.dark,
+                          decoration:
+                              checked ? TextDecoration.lineThrough : null,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  Text(
-                    e.value,
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      color: checked ? AppColors.muted : AppColors.dark,
-                      decoration:
-                          checked ? TextDecoration.lineThrough : null,
-                    ),
-                  ),
-                ],
+                ),
               ),
             );
           }),
