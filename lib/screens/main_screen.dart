@@ -16,25 +16,24 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  // Each tab has its own navigator key so back-stack stays per-tab
+  // Each tab has its own navigator key so back-stack stays per-tab.
+  // Order: Home / Track (Fridge) / Save (Recipes) / Impact (Stats)
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
-    GlobalKey<NavigatorState>(), // Track (contains Home → Fridge)
-    GlobalKey<NavigatorState>(), // Save
-    GlobalKey<NavigatorState>(), // Impact
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
   ];
 
-  Widget _buildTrackNavigator() {
+  Widget _buildHomeNavigator() {
     return Navigator(
       key: _navigatorKeys[0],
-      onGenerateRoute: (settings) {
-        if (settings.name == '/track') {
-          return MaterialPageRoute(builder: (_) => const TrackScreen());
-        }
-        return MaterialPageRoute(builder: (_) => HomeScreen(
-          onGoToFridge: () => _navigatorKeys[0].currentState!
-              .pushNamed('/track'),
-        ));
-      },
+      onGenerateRoute: (_) => MaterialPageRoute(
+        builder: (_) => HomeScreen(
+          // "View all →" on Home now switches to the Track tab directly.
+          onGoToFridge: () => setState(() => _currentIndex = 1),
+        ),
+      ),
     );
   }
 
@@ -54,13 +53,17 @@ class _MainScreenState extends State<MainScreen> {
         body: IndexedStack(
           index: _currentIndex,
           children: [
-            _buildTrackNavigator(),
+            _buildHomeNavigator(),
             Navigator(
               key: _navigatorKeys[1],
-              onGenerateRoute: (_) => MaterialPageRoute(builder: (_) => const SaveScreen()),
+              onGenerateRoute: (_) => MaterialPageRoute(builder: (_) => const TrackScreen()),
             ),
             Navigator(
               key: _navigatorKeys[2],
+              onGenerateRoute: (_) => MaterialPageRoute(builder: (_) => const SaveScreen()),
+            ),
+            Navigator(
+              key: _navigatorKeys[3],
               onGenerateRoute: (_) => MaterialPageRoute(builder: (_) => const ImpactScreen()),
             ),
           ],
@@ -71,13 +74,15 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildNav() {
-    const labels = ['Track', 'Save', 'Impact'];
+    const labels = ['Home', 'Track', 'Save', 'Impact'];
     const activeIcons = [
+      Icons.home_rounded,
       Icons.kitchen_rounded,
       Icons.menu_book_rounded,
       Icons.insights_rounded,
     ];
     const inactiveIcons = [
+      Icons.home_outlined,
       Icons.kitchen_outlined,
       Icons.menu_book_outlined,
       Icons.insights_outlined,
@@ -103,7 +108,7 @@ class _MainScreenState extends State<MainScreen> {
             ],
           ),
           child: Row(
-            children: List.generate(3, (i) {
+            children: List.generate(4, (i) {
               final active = _currentIndex == i;
               return Expanded(
                 child: GestureDetector(

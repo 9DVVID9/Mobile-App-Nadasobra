@@ -79,15 +79,9 @@ class _TrackScreenState extends State<TrackScreen> {
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () => Navigator.of(context).pop(),
-            child: const Icon(Icons.arrow_back_ios_new_rounded,
-                size: 20, color: AppColors.dark),
-          ),
-          const SizedBox(width: 12),
           Text('Your fridge',
               style: GoogleFonts.fredoka(
-                  fontSize: 20,
+                  fontSize: 24,
                   fontWeight: FontWeight.w600,
                   color: AppColors.dark)),
         ],
