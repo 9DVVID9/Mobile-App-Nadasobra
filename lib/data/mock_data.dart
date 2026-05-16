@@ -115,6 +115,56 @@ class MockData {
       vegetarian: true,
       imagePath: 'assets/recipes/revuelto-de-huevo.jpg',
     ),
+    const Recipe(
+      id: 'r7', name: 'Sopa de Lentejas', emoji: '🍲',
+      ingredientNames: ['Lentils', 'Onion', 'Carrot', 'Tomato', 'Bay leaf'],
+      steps: [
+        'Sauté chopped onion and diced carrot for 5 min.',
+        'Add lentils, chopped tomato, bay leaf and 1L water.',
+        'Simmer 30 min, season with salt and serve hot.',
+      ],
+      durationMinutes: 40, difficulty: 'Easy', co2SavedKg: 0.55,
+      tag: RecipeTag.pantry,
+      vegetarian: true,
+      imagePath: 'assets/recipes/sopa-de-lentejas.jpg',
+    ),
+    const Recipe(
+      id: 'r8', name: 'Hamburguesa Casera', emoji: '🍔',
+      ingredientNames: ['Beef', 'Bread', 'Cheese', 'Lettuce', 'Tomato'],
+      steps: [
+        'Shape the beef into patties and season with salt and pepper.',
+        'Cook on a hot pan 4 min per side until juicy.',
+        'Toast the bread and layer with lettuce, tomato, patty and cheese.',
+      ],
+      durationMinutes: 20, difficulty: 'Medium', co2SavedKg: 0.35,
+      tag: RecipeTag.protein,
+      imagePath: 'assets/recipes/hamburguesa-casera.jpg',
+    ),
+    const Recipe(
+      id: 'r9', name: 'Crema de Calabaza', emoji: '🎃',
+      ingredientNames: ['Pumpkin', 'Onion', 'Garlic', 'Milk', 'Salt'],
+      steps: [
+        'Sauté chopped onion and garlic for 3 min, then add cubed pumpkin.',
+        'Cover with water and simmer 20 min until tender.',
+        'Blend with milk and salt to a creamy texture.',
+      ],
+      durationMinutes: 30, difficulty: 'Easy', co2SavedKg: 0.4,
+      tag: RecipeTag.usesExpiring,
+      vegetarian: true,
+      imagePath: 'assets/recipes/Crema-de-calabaza.jpg',
+    ),
+    const Recipe(
+      id: 'r10', name: 'Salmón al Horno', emoji: '🐟',
+      ingredientNames: ['Salmon', 'Lemon', 'Garlic', 'Olive oil', 'Parsley'],
+      steps: [
+        'Preheat the oven to 200°C and place the salmon on a tray.',
+        'Drizzle with oil, lemon juice, chopped garlic and parsley.',
+        'Bake 15 min until flaky and golden.',
+      ],
+      durationMinutes: 25, difficulty: 'Medium', co2SavedKg: 0.45,
+      tag: RecipeTag.protein,
+      imagePath: 'assets/recipes/salmon-al-horno.jpg',
+    ),
   ];
 
   static ImpactStats get impactStats => ImpactStats(
