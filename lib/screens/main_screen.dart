@@ -72,6 +72,16 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildNav() {
     const labels = ['Track', 'Save', 'Impact'];
+    const activeIcons = [
+      Icons.kitchen_rounded,
+      Icons.menu_book_rounded,
+      Icons.insights_rounded,
+    ];
+    const inactiveIcons = [
+      Icons.kitchen_outlined,
+      Icons.menu_book_outlined,
+      Icons.insights_outlined,
+    ];
 
     return SafeArea(
       child: Padding(
@@ -107,18 +117,12 @@ class _MainScreenState extends State<MainScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 180),
-                        width: 18,
-                        height: 18,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: active
-                              ? AppColors.teal.withValues(alpha: 0.7)
-                              : AppColors.muted.withValues(alpha: 0.3),
-                        ),
+                      Icon(
+                        active ? activeIcons[i] : inactiveIcons[i],
+                        size: 22,
+                        color: active ? AppColors.teal : AppColors.muted,
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 4),
                       Text(
                         labels[i],
                         style: GoogleFonts.fredoka(
