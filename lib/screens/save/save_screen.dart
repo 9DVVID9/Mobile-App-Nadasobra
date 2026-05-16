@@ -127,8 +127,12 @@ class _SaveScreenState extends State<SaveScreen> {
                           hintText: 'Search recipes...',
                           hintStyle: GoogleFonts.inter(
                               fontSize: 13, color: AppColors.muted),
+                          filled: false,
                           border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                           isCollapsed: true,
+                          contentPadding: EdgeInsets.zero,
                         ),
                       ),
                     ),
