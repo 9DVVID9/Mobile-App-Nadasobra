@@ -67,7 +67,7 @@ class ImpactScreen extends StatelessWidget {
                   value: '$recipes',
                   label: 'Recipes cooked',
                   emoji: '🍳',
-                  tint: AppColors.gold),
+                  background: AppColors.statGoldBg),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -75,7 +75,7 @@ class ImpactScreen extends StatelessWidget {
                   value: '${food}kg',
                   label: 'Food saved',
                   emoji: '🌱',
-                  tint: AppColors.teal),
+                  background: AppColors.statMintBg),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -83,7 +83,7 @@ class ImpactScreen extends StatelessWidget {
                   value: '€${money.toStringAsFixed(0)}',
                   label: 'Money saved',
                   emoji: '💶',
-                  tint: AppColors.coral),
+                  background: AppColors.statPeachBg),
             ),
           ],
         ),

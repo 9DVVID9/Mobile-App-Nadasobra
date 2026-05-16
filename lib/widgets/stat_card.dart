@@ -6,14 +6,14 @@ class StatCard extends StatelessWidget {
   final String value;
   final String label;
   final String emoji;
-  final Color tint;
+  final Color background;
 
   const StatCard({
     super.key,
     required this.value,
     required this.label,
     required this.emoji,
-    required this.tint,
+    required this.background,
   });
 
   @override
@@ -21,9 +21,8 @@ class StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: tint.withValues(alpha: 0.12),
+        color: background,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: tint.withValues(alpha: 0.3), width: 1.5),
         boxShadow: AppColors.cardShadow,
       ),
       child: Column(

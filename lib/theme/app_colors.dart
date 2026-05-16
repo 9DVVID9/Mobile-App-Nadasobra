@@ -23,6 +23,11 @@ class AppColors {
   static const tintProtein   = Color(0xFFFFD9C7); // peach
   static const tintOther     = Color(0xFFFFE8B3); // sand
 
+  // Impact stat-card backgrounds (Figma soft pastels)
+  static const statGoldBg  = Color(0xFFFFF1D6);
+  static const statMintBg  = Color(0xFFE0F6EE);
+  static const statPeachBg = Color(0xFFFFE8E0);
+
   // Convenience: card shadows (reused everywhere)
   static List<BoxShadow> get cardShadow => [
     BoxShadow(color: dark.withValues(alpha: 0.08), offset: const Offset(0, 4), blurRadius: 0),
