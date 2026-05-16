@@ -72,7 +72,7 @@ class MockData {
         'Cook on a hot griddle for 6 min per side.',
         'Rest 3 min before serving.',
       ],
-      durationMinutes: 25, difficulty: 'Medium', co2SavedKg: 0.6,
+      durationMinutes: 35, difficulty: 'Medium', co2SavedKg: 0.6,
       tag: RecipeTag.protein,
       imagePath: 'assets/recipes/pollo.jpg',
     ),
