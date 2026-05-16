@@ -59,7 +59,7 @@ class ImpactScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: SizedBox(
-        height: 130,
+        height: 150,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

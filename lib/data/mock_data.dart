@@ -151,7 +151,7 @@ class MockData {
       durationMinutes: 30, difficulty: 'Easy', co2SavedKg: 0.4,
       tag: RecipeTag.usesExpiring,
       vegetarian: true,
-      imagePath: 'assets/recipes/Crema-de-calabaza.jpg',
+      imagePath: 'assets/recipes/crema-de-calabaza.jpg',
     ),
     const Recipe(
       id: 'r10', name: 'Salmón al Horno', emoji: '🐟',
