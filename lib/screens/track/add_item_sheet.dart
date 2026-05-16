@@ -168,7 +168,7 @@ class _AddItemSheetState extends State<AddItemSheet> {
                   fontWeight: FontWeight.w600,
                   color: AppColors.dark)),
           const SizedBox(height: 20),
-          _inputField(_nameController, 'Product name', '🥕 e.g. Carrots'),
+          _nameInputWithPreview(),
           const SizedBox(height: 12),
           _inputField(_quantityController, 'Quantity', 'e.g. 3 units, 500g'),
           const SizedBox(height: 12),
@@ -195,6 +195,47 @@ class _AddItemSheetState extends State<AddItemSheet> {
           ),
         ],
       ),
+    );
+  }
+
+  Color _categoryTint(FoodCategory c) {
+    switch (c) {
+      case FoodCategory.vegetables: return AppColors.tintVegetable;
+      case FoodCategory.dairy: return AppColors.tintDairy;
+      case FoodCategory.proteins: return AppColors.tintProtein;
+      case FoodCategory.other: return AppColors.tintOther;
+    }
+  }
+
+  Widget _nameInputWithPreview() {
+    final preview = _emojiForName(_nameController.text, _category);
+    return Row(
+      children: [
+        Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: _categoryTint(_category),
+            shape: BoxShape.circle,
+          ),
+          alignment: Alignment.center,
+          child: Text(preview, style: const TextStyle(fontSize: 24)),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: TextField(
+            controller: _nameController,
+            onChanged: (_) => setState(() {}),
+            style: GoogleFonts.inter(fontSize: 14, color: AppColors.dark),
+            decoration: InputDecoration(
+              labelText: 'Product name',
+              hintText: 'e.g. Carrots',
+              labelStyle:
+                  GoogleFonts.inter(fontSize: 13, color: AppColors.muted),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
