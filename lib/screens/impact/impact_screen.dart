@@ -58,32 +58,35 @@ class ImpactScreen extends StatelessWidget {
   Widget _buildStatCards(int recipes, double food, double money) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      child: Row(
-        children: [
-          Expanded(
-            child: StatCard(
-                value: '$recipes',
-                label: 'Recipes cooked',
-                emoji: '🍳',
-                tint: AppColors.gold),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: StatCard(
-                value: '${food}kg',
-                label: 'Food saved',
-                emoji: '🌱',
-                tint: AppColors.teal),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: StatCard(
-                value: '€${money.toStringAsFixed(0)}',
-                label: 'Money saved',
-                emoji: '💶',
-                tint: AppColors.coral),
-          ),
-        ],
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: StatCard(
+                  value: '$recipes',
+                  label: 'Recipes cooked',
+                  emoji: '🍳',
+                  tint: AppColors.gold),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: StatCard(
+                  value: '${food}kg',
+                  label: 'Food saved',
+                  emoji: '🌱',
+                  tint: AppColors.teal),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: StatCard(
+                  value: '€${money.toStringAsFixed(0)}',
+                  label: 'Money saved',
+                  emoji: '💶',
+                  tint: AppColors.coral),
+            ),
+          ],
+        ),
       ),
     );
   }
