@@ -29,6 +29,7 @@ class HomeScreen extends StatelessWidget {
             SliverToBoxAdapter(child: _buildExpiringSoon(expiring)),
             if (topRecipe != null)
               SliverToBoxAdapter(child: _buildRecipeBanner(context, topRecipe)),
+            SliverToBoxAdapter(child: _buildDailyTip(now)),
             SliverToBoxAdapter(child: _buildWeekSummary()),
             const SliverToBoxAdapter(child: SizedBox(height: 100)),
           ],
@@ -185,61 +186,163 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Recipe banner with caption/title/subtitle stacked + CTA pill on right
+  // Hero recipe banner — uses the recipe's own photo as background with a
+  // dark gradient so white copy reads. Falls back to teal if no image.
   Widget _buildRecipeBanner(BuildContext context, Recipe topRecipe) {
+    final hasImage = topRecipe.imagePath != null;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      child: GestureDetector(
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => RecipeDetailScreen(recipe: topRecipe),
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Container(
+            height: 190,
+            decoration: BoxDecoration(
+              color: AppColors.teal,
+              image: hasImage
+                  ? DecorationImage(
+                      image: AssetImage(topRecipe.imagePath!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+              boxShadow: AppColors.elevatedShadow,
+            ),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                // Dark gradient overlay — stronger at the bottom for text legibility
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withValues(alpha: 0.0),
+                        Colors.black.withValues(alpha: 0.55),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 16, 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Caption pill at top — a small badge so it doesn't get lost
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: AppColors.white.withValues(alpha: 0.95),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text('What to cook today?',
+                            style: GoogleFonts.fredoka(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.dark)),
+                      ),
+                      const Spacer(),
+                      Text(topRecipe.name,
+                          style: GoogleFonts.fredoka(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600,
+                              height: 1.1,
+                              color: AppColors.white)),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                                '${topRecipe.durationMinutes} min · with what you have',
+                                style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    color: AppColors.white
+                                        .withValues(alpha: 0.9))),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Text('View →',
+                                style: GoogleFonts.fredoka(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.teal)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 7 rotating sustainability / kitchen tips — one per weekday so the home
+  // page changes flavour as the week goes on.
+  static const _dailyTips = [
+    'Store tomatoes outside the fridge — they keep more flavor.',
+    'An egg that sinks in water is fresh. If it floats, throw it.',
+    'Spain wastes 1.3 billion kg of food every year.',
+    'Wilted greens revive after 10 min in a bowl of ice water.',
+    'A third of all food produced globally is wasted.',
+    'Freezing herbs in olive oil keeps them fresh for months.',
+    'Households throw away around €600 of food per year on average.',
+  ];
+
+  Widget _buildDailyTip(DateTime now) {
+    final tip = _dailyTips[(now.weekday - 1) % _dailyTips.length];
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(20, 16, 16, 16),
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
         decoration: BoxDecoration(
-          color: AppColors.teal,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: AppColors.elevatedShadow,
+          color: AppColors.statGoldBg,
+          borderRadius: BorderRadius.circular(20),
         ),
-        child: Stack(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('What to cook today?',
-                    style: GoogleFonts.inter(
-                        fontSize: 12, color: AppColors.white)),
-                const SizedBox(height: 6),
-                Text(topRecipe.name,
-                    style: GoogleFonts.fredoka(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.white)),
-                const SizedBox(height: 6),
-                Text('With what you have at home',
-                    style: GoogleFonts.inter(
-                        fontSize: 13,
-                        color: AppColors.white.withValues(alpha: 0.8))),
-              ],
+            Container(
+              width: 36,
+              height: 36,
+              decoration: const BoxDecoration(
+                color: AppColors.gold,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: const Text('💡', style: TextStyle(fontSize: 18)),
             ),
-            Positioned(
-              right: 0,
-              bottom: 0,
-              child: GestureDetector(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => RecipeDetailScreen(recipe: topRecipe),
-                  ),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 9),
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(17),
-                  ),
-                  child: Text('View recipe →',
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Did you know?',
+                      style: GoogleFonts.fredoka(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.dark.withValues(alpha: 0.6))),
+                  const SizedBox(height: 3),
+                  Text(tip,
                       style: GoogleFonts.inter(
                           fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.teal)),
-                ),
+                          height: 1.35,
+                          color: AppColors.dark)),
+                ],
               ),
             ),
           ],
@@ -248,42 +351,78 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // Hero "this week" card — big proud number with personality, instead of
+  // the previous pair of small pills.
   Widget _buildWeekSummary() {
     final stats = ImpactService().getStats();
-    final foodLabel = stats.foodSavedKg < 1
-        ? '${(stats.foodSavedKg * 1000).round()}g saved'
-        : '${stats.foodSavedKg}kg saved';
+    final isKg = stats.foodSavedKg >= 1;
+    final amount = isKg
+        ? stats.foodSavedKg.toStringAsFixed(1)
+        : (stats.foodSavedKg * 1000).round().toString();
+    final unit = isKg ? 'kg' : 'g';
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+        padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: AppColors.statMintBg,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-              color: AppColors.dark.withValues(alpha: 0.08), width: 2),
           boxShadow: AppColors.cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Your week',
-                style: GoogleFonts.inter(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.dark)),
-            const SizedBox(height: 10),
-            Container(
-                height: 1, color: AppColors.dark.withValues(alpha: 0.06)),
-            const SizedBox(height: 10),
             Row(
               children: [
-                Expanded(
-                    child: _pill(
-                        '${stats.recipesCooked} recipes cooked', AppColors.gold)),
-                const SizedBox(width: 10),
-                Expanded(child: _pill(foodLabel, AppColors.teal)),
+                const Text('🌱', style: TextStyle(fontSize: 18)),
+                const SizedBox(width: 8),
+                Text('This week',
+                    style: GoogleFonts.fredoka(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.dark.withValues(alpha: 0.7))),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(amount,
+                    style: GoogleFonts.fredoka(
+                        fontSize: 52,
+                        fontWeight: FontWeight.w600,
+                        height: 1.0,
+                        color: AppColors.dark)),
+                const SizedBox(width: 4),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(unit,
+                      style: GoogleFonts.fredoka(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.teal)),
+                ),
+                const SizedBox(width: 8),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Text('of food saved',
+                      style: GoogleFonts.inter(
+                          fontSize: 13,
+                          color: AppColors.dark.withValues(alpha: 0.7))),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Container(
+                height: 1, color: AppColors.dark.withValues(alpha: 0.08)),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                _miniStat('🍳', '${stats.recipesCooked}', 'recipes'),
+                const SizedBox(width: 24),
+                _miniStat('💶',
+                    '€${stats.moneySavedEuros.toStringAsFixed(0)}', 'saved'),
               ],
             ),
           ],
@@ -292,18 +431,22 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _pill(String label, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.18),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(label,
-          style: GoogleFonts.fredoka(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-              color: AppColors.dark)),
+  Widget _miniStat(String emoji, String value, String label) {
+    return Row(
+      children: [
+        Text(emoji, style: const TextStyle(fontSize: 16)),
+        const SizedBox(width: 6),
+        Text(value,
+            style: GoogleFonts.fredoka(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppColors.dark)),
+        const SizedBox(width: 4),
+        Text(label,
+            style: GoogleFonts.inter(
+                fontSize: 12,
+                color: AppColors.dark.withValues(alpha: 0.6))),
+      ],
     );
   }
 }
