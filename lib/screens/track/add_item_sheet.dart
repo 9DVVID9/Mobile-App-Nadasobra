@@ -32,6 +32,74 @@ class _AddItemSheetState extends State<AddItemSheet> {
     FoodCategory.other: 'Other',
   };
 
+  // Keyword → emoji lookup. Checked longest-first so "eggplant" beats "egg".
+  static const Map<String, String> _emojiMap = {
+    // Dairy
+    'milk': '🥛', 'leche': '🥛',
+    'cheese': '🧀', 'queso': '🧀',
+    'butter': '🧈', 'mantequilla': '🧈',
+    'yogurt': '🥛', 'yoghurt': '🥛', 'yogur': '🥛',
+    // Proteins
+    'eggplant': '🍆', 'berenjena': '🍆',
+    'egg': '🥚', 'huevo': '🥚',
+    'chicken': '🍗', 'pollo': '🍗',
+    'beef': '🥩', 'steak': '🥩', 'carne': '🥩',
+    'fish': '🐟', 'pescado': '🐟',
+    'salmon': '🐟', 'salmón': '🐟',
+    'tuna': '🐟', 'atún': '🐟',
+    'shrimp': '🦐', 'gamba': '🦐',
+    'bacon': '🥓',
+    'sausage': '🌭', 'salchicha': '🌭',
+    'ham': '🍖', 'jamón': '🍖',
+    // Vegetables
+    'broccoli': '🥦', 'brócoli': '🥦',
+    'tomato': '🍅', 'tomate': '🍅',
+    'carrot': '🥕', 'zanahoria': '🥕',
+    'onion': '🧅', 'cebolla': '🧅',
+    'potato': '🥔', 'patata': '🥔', 'papa': '🥔',
+    'garlic': '🧄', 'ajo': '🧄',
+    'pepper': '🫑', 'pimiento': '🫑',
+    'cucumber': '🥒', 'pepino': '🥒',
+    'lettuce': '🥬', 'lechuga': '🥬',
+    'spinach': '🥬', 'espinaca': '🥬',
+    'mushroom': '🍄', 'champiñón': '🍄',
+    'corn': '🌽', 'maíz': '🌽',
+    'avocado': '🥑', 'aguacate': '🥑',
+    // Fruits
+    'lemon': '🍋', 'limón': '🍋',
+    'apple': '🍎', 'manzana': '🍎',
+    'banana': '🍌', 'plátano': '🍌',
+    'orange': '🍊', 'naranja': '🍊',
+    'strawberry': '🍓', 'fresa': '🍓',
+    'grape': '🍇', 'uva': '🍇',
+    'watermelon': '🍉', 'sandía': '🍉',
+    'pineapple': '🍍', 'piña': '🍍',
+    'peach': '🍑', 'melocotón': '🍑',
+    // Pantry
+    'bread': '🍞', 'pan': '🍞',
+    'rice': '🍚', 'arroz': '🍚',
+    'pasta': '🍝',
+    'noodle': '🍜', 'fideo': '🍜',
+    'olive': '🫒', 'aceituna': '🫒',
+    'honey': '🍯', 'miel': '🍯',
+    'coffee': '☕', 'café': '☕',
+    'tea': '🍵', 'té': '🍵',
+    'salt': '🧂', 'sal': '🧂',
+    'water': '💧', 'agua': '💧',
+  };
+
+  // Resolves the best emoji for a typed name, falling back to the category default.
+  // Longest keyword wins so "eggplant" matches before "egg".
+  String _emojiForName(String name, FoodCategory fallback) {
+    final lower = name.toLowerCase();
+    final entries = _emojiMap.entries.toList()
+      ..sort((a, b) => b.key.length.compareTo(a.key.length));
+    for (final entry in entries) {
+      if (lower.contains(entry.key)) return entry.value;
+    }
+    return _categoryEmojis[fallback]!;
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -40,10 +108,11 @@ class _AddItemSheetState extends State<AddItemSheet> {
   }
 
   void _submit() {
-    if (_nameController.text.trim().isEmpty) return;
+    final name = _nameController.text.trim();
+    if (name.isEmpty) return;
     _service.add(FridgeItem(
-      name: _nameController.text.trim(),
-      emoji: _categoryEmojis[_category]!,
+      name: name,
+      emoji: _emojiForName(name, _category),
       category: _category,
       quantity: _quantityController.text.trim().isEmpty
           ? '1 unit'
