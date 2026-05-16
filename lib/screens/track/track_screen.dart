@@ -78,12 +78,6 @@ class _TrackScreenState extends State<TrackScreen> {
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                   color: AppColors.dark)),
-          const Spacer(),
-          GestureDetector(
-            onTap: _openAddSheet,
-            child: Text('+ Add',
-                style: GoogleFonts.fredoka(fontSize: 14, color: AppColors.teal)),
-          ),
         ],
       ),
     );
