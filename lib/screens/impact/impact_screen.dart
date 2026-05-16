@@ -58,7 +58,8 @@ class ImpactScreen extends StatelessWidget {
   Widget _buildStatCards(int recipes, double food, double money) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      child: IntrinsicHeight(
+      child: SizedBox(
+        height: 130,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

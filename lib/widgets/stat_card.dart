@@ -35,6 +35,8 @@ class StatCard extends StatelessWidget {
                   fontSize: 22, fontWeight: FontWeight.w600, color: AppColors.dark)),
           const SizedBox(height: 2),
           Text(label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.inter(fontSize: 11, color: AppColors.muted)),
         ],
       ),
