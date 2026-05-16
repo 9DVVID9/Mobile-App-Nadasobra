@@ -48,6 +48,7 @@ class MockData {
       ],
       durationMinutes: 15, difficulty: 'Easy', co2SavedKg: 0.4,
       tag: RecipeTag.usesExpiring,
+      vegetarian: true,
       imagePath: 'assets/recipes/tortilla-de-brocoli.jpg',
     ),
     const Recipe(
@@ -60,6 +61,7 @@ class MockData {
       ],
       durationMinutes: 20, difficulty: 'Easy', co2SavedKg: 0.3,
       tag: RecipeTag.usesExpiring,
+      vegetarian: true,
       imagePath: 'assets/recipes/pasta-con-tomate.jpeg',
     ),
     const Recipe(
@@ -84,6 +86,7 @@ class MockData {
       ],
       durationMinutes: 10, difficulty: 'Easy', co2SavedKg: 0.2,
       tag: RecipeTag.usesExpiring,
+      vegetarian: true,
       imagePath: 'assets/recipes/gratinado.jpg',
     ),
     const Recipe(
@@ -96,6 +99,7 @@ class MockData {
       ],
       durationMinutes: 25, difficulty: 'Easy', co2SavedKg: 0.5,
       tag: RecipeTag.pantry,
+      vegetarian: true,
       imagePath: 'assets/recipes/apetitoso-arroz.jpg',
     ),
     const Recipe(
@@ -108,6 +112,7 @@ class MockData {
       ],
       durationMinutes: 10, difficulty: 'Easy', co2SavedKg: 0.35,
       tag: RecipeTag.usesExpiring,
+      vegetarian: true,
       imagePath: 'assets/recipes/revuelto-de-huevo.jpg',
     ),
   ];

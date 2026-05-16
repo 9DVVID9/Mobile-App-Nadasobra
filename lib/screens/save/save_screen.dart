@@ -18,16 +18,27 @@ class _SaveScreenState extends State<SaveScreen> {
   final _searchController = TextEditingController();
   final _searchFocus = FocusNode();
   bool _onlyWithFridge = false;
+  bool _quick = false;
+  bool _vegetarian = false;
+  bool _under30 = false;
   bool _searchOpen = false;
   String _searchQuery = '';
 
-  // Search overrides fridge filter when active; otherwise the existing toggle wins.
+  // Search overrides fridge filter when active; chip filters always apply on top.
   List<Recipe> get _recipes {
+    Iterable<Recipe> list;
     if (_searchQuery.isNotEmpty) {
       final q = _searchQuery.toLowerCase();
-      return _service.getAll().where((r) => r.name.toLowerCase().contains(q)).toList();
+      list = _service.getAll().where((r) => r.name.toLowerCase().contains(q));
+    } else if (_onlyWithFridge) {
+      list = _service.filterByFridgeIngredients();
+    } else {
+      list = _service.getAll();
     }
-    return _onlyWithFridge ? _service.filterByFridgeIngredients() : _service.getAll();
+    if (_quick) list = list.where((r) => r.durationMinutes <= 15);
+    if (_vegetarian) list = list.where((r) => r.vegetarian);
+    if (_under30) list = list.where((r) => r.durationMinutes < 30);
+    return list.toList();
   }
 
   @override
@@ -197,17 +208,20 @@ class _SaveScreenState extends State<SaveScreen> {
   }
 
   Widget _buildFilterChips() {
-    const chips = ['With what I have ✓', 'Quick', 'Vegetarian', 'Under 30 min'];
+    final chips = [
+      ('With what I have', _onlyWithFridge, () => setState(() => _onlyWithFridge = !_onlyWithFridge)),
+      ('Quick', _quick, () => setState(() => _quick = !_quick)),
+      ('Vegetarian', _vegetarian, () => setState(() => _vegetarian = !_vegetarian)),
+      ('Under 30 min', _under30, () => setState(() => _under30 = !_under30)),
+    ];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Row(
-        children: List.generate(chips.length, (i) {
-          final active = i == 0 ? _onlyWithFridge : false;
+        children: chips.map((chip) {
+          final (label, active, onTap) = chip;
           return GestureDetector(
-            onTap: () {
-              if (i == 0) setState(() => _onlyWithFridge = !_onlyWithFridge);
-            },
+            onTap: onTap,
             child: Container(
               margin: const EdgeInsets.only(right: 8),
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
@@ -220,14 +234,14 @@ class _SaveScreenState extends State<SaveScreen> {
                         color: AppColors.dark.withValues(alpha: 0.08),
                         width: 2),
               ),
-              child: Text(chips[i],
+              child: Text(active ? '$label ✓' : label,
                   style: GoogleFonts.fredoka(
                       fontSize: 13,
                       fontWeight: active ? FontWeight.w600 : FontWeight.w500,
                       color: active ? AppColors.white : AppColors.dark)),
             ),
           );
-        }),
+        }).toList(),
       ),
     );
   }

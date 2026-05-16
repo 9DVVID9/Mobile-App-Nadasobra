@@ -12,6 +12,7 @@ class Recipe {
   final String difficulty;
   final double co2SavedKg;
   final RecipeTag tag;
+  final bool vegetarian;
   // When set, RecipeCard / detail show this asset instead of the emoji.
   // Asset path is resolved from `assets/recipes/` registered in pubspec.yaml.
   final String? imagePath;
@@ -26,6 +27,7 @@ class Recipe {
     required this.difficulty,
     required this.co2SavedKg,
     required this.tag,
+    this.vegetarian = false,
     this.imagePath,
   });
 
