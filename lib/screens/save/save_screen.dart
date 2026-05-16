@@ -182,26 +182,34 @@ class _SaveScreenState extends State<SaveScreen> {
     final matchCount = _service.filterByFridgeIngredients().length;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.gold.withValues(alpha: 0.25),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.gold, width: 1.5),
-        ),
-        child: Row(
-          children: [
-            const Text('✨', style: TextStyle(fontSize: 20)),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                'With what you have · $matchCount possible recipes',
-                style: GoogleFonts.fredoka(fontSize: 13, color: AppColors.dark),
+      child: GestureDetector(
+        onTap: () => setState(() => _onlyWithFridge = !_onlyWithFridge),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.gold.withValues(alpha: 0.25),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.gold, width: 1.5),
+          ),
+          child: Row(
+            children: [
+              const Text('✨', style: TextStyle(fontSize: 20)),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'With what you have · $matchCount possible recipes',
+                  style: GoogleFonts.fredoka(fontSize: 13, color: AppColors.dark),
+                ),
               ),
-            ),
-            const Icon(Icons.chevron_right_rounded,
-                color: AppColors.dark, size: 18),
-          ],
+              Icon(
+                _onlyWithFridge
+                    ? Icons.check_rounded
+                    : Icons.chevron_right_rounded,
+                color: AppColors.dark,
+                size: 18,
+              ),
+            ],
+          ),
         ),
       ),
     );
