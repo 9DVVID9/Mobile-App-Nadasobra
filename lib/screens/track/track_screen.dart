@@ -16,11 +16,23 @@ class TrackScreen extends StatefulWidget {
 
 class _TrackScreenState extends State<TrackScreen> {
   final _service = FridgeService();
+  final _searchController = TextEditingController();
   FoodCategory? _selectedCategory; // null = All
+  String _searchQuery = '';
 
   List<FridgeItem> get _filteredItems {
-    if (_selectedCategory == null) return _service.getAll();
-    return _service.getByCategory(_selectedCategory!);
+    final base = _selectedCategory == null
+        ? _service.getAll()
+        : _service.getByCategory(_selectedCategory!);
+    if (_searchQuery.isEmpty) return base;
+    final q = _searchQuery.toLowerCase();
+    return base.where((i) => i.name.toLowerCase().contains(q)).toList();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   void _delete(String id) {
@@ -100,8 +112,29 @@ class _TrackScreenState extends State<TrackScreen> {
           children: [
             const Icon(Icons.search_rounded, color: AppColors.muted, size: 18),
             const SizedBox(width: 8),
-            Text('Search your fridge...',
-                style: GoogleFonts.inter(fontSize: 13, color: AppColors.muted)),
+            Expanded(
+              child: TextField(
+                controller: _searchController,
+                onChanged: (v) => setState(() => _searchQuery = v),
+                style: GoogleFonts.inter(fontSize: 13, color: AppColors.dark),
+                decoration: InputDecoration(
+                  hintText: 'Search your fridge...',
+                  hintStyle: GoogleFonts.inter(
+                      fontSize: 13, color: AppColors.muted),
+                  border: InputBorder.none,
+                  isCollapsed: true,
+                ),
+              ),
+            ),
+            if (_searchQuery.isNotEmpty)
+              GestureDetector(
+                onTap: () {
+                  _searchController.clear();
+                  setState(() => _searchQuery = '');
+                },
+                child: const Icon(Icons.close_rounded,
+                    color: AppColors.muted, size: 18),
+              ),
           ],
         ),
       ),
