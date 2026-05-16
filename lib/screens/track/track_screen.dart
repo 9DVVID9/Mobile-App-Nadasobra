@@ -121,8 +121,12 @@ class _TrackScreenState extends State<TrackScreen> {
                   hintText: 'Search your fridge...',
                   hintStyle: GoogleFonts.inter(
                       fontSize: 13, color: AppColors.muted),
+                  filled: false,
                   border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
                   isCollapsed: true,
+                  contentPadding: EdgeInsets.zero,
                 ),
               ),
             ),
