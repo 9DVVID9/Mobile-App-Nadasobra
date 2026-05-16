@@ -351,15 +351,11 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Hero "this week" card — big proud number with personality, instead of
-  // the previous pair of small pills.
+  // Hero "this week" card — CO₂ avoided as the headline (different angle
+  // from the Impact screen, which owns recipes/food-kg/money totals).
   Widget _buildWeekSummary() {
     final stats = ImpactService().getStats();
-    final isKg = stats.foodSavedKg >= 1;
-    final amount = isKg
-        ? stats.foodSavedKg.toStringAsFixed(1)
-        : (stats.foodSavedKg * 1000).round().toString();
-    final unit = isKg ? 'kg' : 'g';
+    final co2 = stats.co2SavedKg.toStringAsFixed(1);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
@@ -375,7 +371,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Text('🌱', style: TextStyle(fontSize: 18)),
+                const Text('🌍', style: TextStyle(fontSize: 18)),
                 const SizedBox(width: 8),
                 Text('This week',
                     style: GoogleFonts.fredoka(
@@ -388,7 +384,7 @@ class HomeScreen extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(amount,
+                Text(co2,
                     style: GoogleFonts.fredoka(
                         fontSize: 52,
                         fontWeight: FontWeight.w600,
@@ -397,7 +393,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(width: 4),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(unit,
+                  child: Text('kg CO₂',
                       style: GoogleFonts.fredoka(
                           fontSize: 22,
                           fontWeight: FontWeight.w600,
@@ -406,7 +402,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(width: 8),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
-                  child: Text('of food saved',
+                  child: Text('avoided',
                       style: GoogleFonts.inter(
                           fontSize: 13,
                           color: AppColors.dark.withValues(alpha: 0.7))),
@@ -419,10 +415,9 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                _miniStat('🍳', '${stats.recipesCooked}', 'recipes'),
+                _miniStat('🥬', '${stats.itemsRescued}', 'rescued'),
                 const SizedBox(width: 24),
-                _miniStat('💶',
-                    '€${stats.moneySavedEuros.toStringAsFixed(0)}', 'saved'),
+                _miniStat('🔥', '${stats.streakDays}', 'day streak'),
               ],
             ),
           ],

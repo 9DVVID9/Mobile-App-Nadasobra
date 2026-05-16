@@ -171,6 +171,8 @@ class MockData {
     recipesCooked: 12,
     foodSavedKg: 3.4,
     moneySavedEuros: 18.5,
+    co2SavedKg: 4.8,
+    itemsRescued: 8,
     streakDays: 5,
     weeklyFoodSaved: List.unmodifiable([0.2, 0.5, 0.3, 0.8, 0.6, 0.7, 0.3]),
     badges: const [
