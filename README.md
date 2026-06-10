@@ -15,8 +15,6 @@ University of Madrid (Universidad Europea de Madrid).
 ## Team
 
 - **Iancu David**
-- **Ali Kaan**
-- **Omer Oz**
 
 ---
 
